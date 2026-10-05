@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fotos Vitória</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #000;
+  color: #fff;
+  padding: 30px 15px;
+}
+h1 {
+  color: #fff;
+}
+p {
+  color: #ccc;
+}
+input, button {
+  margin: 12px;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+}
+button {
+  background: #c0c0c0;
+  color: #000;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📸 Fotos da Vitória</h1>
+
+<p>Envie aqui as fotos e vídeos da festa!</p>
+
+<input type="file" id="arquivo" accept="image/*,video/*">
+
+<br>
+
+<button onclick="enviar()">Enviar arquivo</button>
+
+<p id="mensagem"></p>
+
+<script>
+function enviar() {
+  const arquivo = document.getElementById("arquivo").files[0];
+
+  if (!arquivo) {
+    document.getElementById("mensagem").innerText =
+      "Escolha uma foto ou vídeo primeiro.";
+    return;
+  }
+
+  document.getElementById("mensagem").innerText =
+    "Arquivo selecionado: " + arquivo.name;
+}
+</script>
+
+</body>
+  </html>
