@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fotos Vitória</title>
+
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -12,22 +13,27 @@ body {
   color: #fff;
   padding: 30px 15px;
 }
+
 h1 {
   color: #fff;
 }
+
 p {
   color: #ccc;
 }
+
 input, button {
   margin: 12px;
   padding: 14px;
   border-radius: 8px;
   border: none;
 }
+
 button {
   background: #c0c0c0;
   color: #000;
   font-weight: bold;
+  cursor: pointer;
 }
 </style>
 </head>
@@ -47,19 +53,63 @@ button {
 <p id="mensagem"></p>
 
 <script>
+
+const URL_APPS_SCRIPT =
+"https://script.google.com/macros/s/AKfycbyYk_1cdOUgIcTfj8fmb7uiT6r0duG9LcJ0_U4HIIKHMyTC4Oym_htvVaxRX_h6qSUF/exec";
+
 function enviar() {
+
   const arquivo = document.getElementById("arquivo").files[0];
+  const mensagem = document.getElementById("mensagem");
 
   if (!arquivo) {
-    document.getElementById("mensagem").innerText =
-      "Escolha uma foto ou vídeo primeiro.";
+    mensagem.innerText = "Escolha uma foto ou vídeo primeiro.";
     return;
   }
 
-  document.getElementById("mensagem").innerText =
-    "Arquivo selecionado: " + arquivo.name;
+  mensagem.innerText = "Enviando... aguarde ❤️";
+
+  const leitor = new FileReader();
+
+  leitor.onload = function(e) {
+
+    const base64 = e.target.result.split(",")[1];
+
+    const dados = {
+      filename: arquivo.name,
+      image: base64
+    };
+
+    fetch(URL_APPS_SCRIPT, {
+      method: "POST",
+      body: JSON.stringify(dados)
+    })
+    .then(resposta => resposta.json())
+    .then(resultado => {
+
+      if (resultado.ok) {
+        mensagem.innerText =
+          "✅ Enviado com sucesso! Obrigada pela sua foto! ❤️";
+
+        document.getElementById("arquivo").value = "";
+
+      } else {
+        mensagem.innerText =
+          "❌ Não foi possível enviar. Tente novamente.";
+      }
+
+    })
+    .catch(erro => {
+      mensagem.innerText =
+        "❌ Ocorreu um erro ao enviar. Tente novamente.";
+    });
+
+  };
+
+  leitor.readAsDataURL(arquivo);
 }
+
 </script>
 
 </body>
-  </html>
+</html>
